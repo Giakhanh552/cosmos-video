@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListItemText, Paper, Typography, CircularProgress, Box, Alert } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -27,7 +29,7 @@ const CategoriesPage = () => {
         <Typography variant="h5" mb={2} fontWeight={700} align="center">Danh mục</Typography>
         <List>
           {categories.map(cat => (
-            <ListItem key={cat.id}>
+            <ListItem button key={cat.id} onClick={() => navigate(`/categories/${cat.id}/videos`)}>
               <ListItemText primary={cat.name} />
             </ListItem>
           ))}

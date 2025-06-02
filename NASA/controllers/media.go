@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"nasa-media-backend/config"
 	"nasa-media-backend/models"
@@ -145,6 +146,119 @@ func SearchVideos(c *gin.Context) {
 			videos = append(videos, v)
 		} else {
 			fmt.Println("Error decoding video:", err)
+		}
+	}
+	c.JSON(http.StatusOK, videos)
+}
+
+type createVideoInput struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	URL         string `json:"url"`
+	Thumbnail   string `json:"thumbnail"`
+	CategoryID  string `json:"category_id"`
+}
+
+func CreateVideo(c *gin.Context) {
+	var input createVideoInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found in context"})
+		return
+	}
+	objUploaderID, err := primitive.ObjectIDFromHex(userID.(string))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid uploader ID"})
+		return
+	}
+	objCatID, err := primitive.ObjectIDFromHex(input.CategoryID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid category ID"})
+		return
+	}
+	video := models.Video{
+		ID:          primitive.NewObjectID(),
+		Title:       input.Title,
+		Description: input.Description,
+		URL:         input.URL,
+		Thumbnail:   input.Thumbnail,
+		CategoryID:  objCatID,
+		UploaderID:  objUploaderID,
+		CreatedAt:   time.Now().Unix(),
+	}
+	_, err = config.DB.Collection("videos").InsertOne(context.Background(), video)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create video"})
+		return
+	}
+	c.JSON(http.StatusCreated, video)
+}
+
+func UpdateVideo(c *gin.Context) {
+	id := c.Param("id")
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+	var input models.Video
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	update := map[string]interface{}{
+		"title":       input.Title,
+		"description": input.Description,
+		"url":         input.URL,
+		"thumbnail":   input.Thumbnail,
+		"category_id": input.CategoryID,
+	}
+	_, err = config.DB.Collection("videos").UpdateOne(context.Background(), map[string]interface{}{"_id": objID}, map[string]interface{}{"$set": update})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update video"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Video updated successfully"})
+}
+
+func DeleteVideo(c *gin.Context) {
+	id := c.Param("id")
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+	_, err = config.DB.Collection("videos").DeleteOne(context.Background(), map[string]interface{}{"_id": objID})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete video"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Video deleted successfully"})
+}
+
+func GetVideosByCategory(c *gin.Context) {
+	categoryID := c.Param("id")
+	objCatID, err := primitive.ObjectIDFromHex(categoryID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid category ID"})
+		return
+	}
+	filter := map[string]interface{}{"category_id": objCatID}
+	var videos []models.Video
+	cursor, err := config.DB.Collection("videos").Find(context.Background(), filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching videos by category"})
+		return
+	}
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var v models.Video
+		if err := cursor.Decode(&v); err == nil {
+			videos = append(videos, v)
 		}
 	}
 	c.JSON(http.StatusOK, videos)

@@ -35,6 +35,9 @@ func GetFavorites(c *gin.Context) {
 			favorites = append(favorites, fav)
 		}
 	}
+	if favorites == nil {
+		favorites = []models.Favorite{}
+	}
 	c.JSON(http.StatusOK, favorites)
 }
 

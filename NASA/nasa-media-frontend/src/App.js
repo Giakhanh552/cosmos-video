@@ -64,6 +64,7 @@ function App() {
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/add-video" element={<AddVideo />} />
               <Route path="/add-category" element={<AddCategory />} />
+              <Route path="/categories/:categoryId/videos" element={<VideosPage />} />
             </Routes>
           </Box>
         </Container>

@@ -22,15 +22,32 @@ const AddVideo = () => {
     e.preventDefault();
     setError(''); setSuccess('');
     try {
-      // Giả lập gửi API, backend chưa có POST /videos
-      // const token = localStorage.getItem('token');
-      // await axios.post('http://localhost:8080/videos', { title, description, url, thumbnail, category_id: category }, { headers: { Authorization: `Bearer ${token}` } });
-      setSuccess('Thêm video thành công! (Demo, backend chưa hỗ trợ)');
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:8080/videos', {
+        title,
+        description,
+        url,
+        thumbnail,
+        category_id: category
+      }, { headers: { Authorization: `Bearer ${token}` } });
+      setSuccess('Thêm video thành công!');
       setTimeout(() => navigate('/videos'), 1500);
     } catch (err) {
       setError('Thêm video thất bại!');
     }
   };
+
+  // Thêm hàm lấy thumbnail YouTube
+  function getYouTubeId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+
+  function getYouTubeThumbnail(url) {
+    const id = getYouTubeId(url);
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+  }
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
@@ -41,7 +58,11 @@ const AddVideo = () => {
         <form onSubmit={handleSubmit}>
           <TextField label="Tiêu đề" fullWidth margin="normal" value={title} onChange={e => setTitle(e.target.value)} required />
           <TextField label="Mô tả" fullWidth margin="normal" value={description} onChange={e => setDescription(e.target.value)} required />
-          <TextField label="URL Video" fullWidth margin="normal" value={url} onChange={e => setUrl(e.target.value)} required />
+          <TextField label="URL Video" fullWidth margin="normal" value={url} onChange={e => {
+            setUrl(e.target.value);
+            const thumb = getYouTubeThumbnail(e.target.value);
+            if (thumb) setThumbnail(thumb);
+          }} required />
           <TextField label="Thumbnail" fullWidth margin="normal" value={thumbnail} onChange={e => setThumbnail(e.target.value)} required />
           <TextField select label="Danh mục" fullWidth margin="normal" value={category} onChange={e => setCategory(e.target.value)} required>
             {categories.map(cat => (
