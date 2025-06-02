@@ -25,7 +25,7 @@ const CategoriesPage = () => {
 
   return (
     <Box mt={2} display="flex" justifyContent="center">
-      <Paper sx={{ width: 400 }}>
+      <Paper sx={{ width: 400, background: 'rgba(35,41,70,0.25)', backdropFilter: 'blur(16px)', borderRadius: 4, border: '1.5px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 32px 0 rgba(31,38,135,0.17)' }}>
         <Typography variant="h5" mb={2} fontWeight={700} align="center">Danh mục</Typography>
         <List>
           {categories.map(cat => (

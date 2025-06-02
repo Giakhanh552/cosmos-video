@@ -15,8 +15,8 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" color="primary">
-      <Toolbar>
+    <AppBar position="static" color="primary" sx={{ background: 'rgba(35, 41, 70, 0.35)', backdropFilter: 'blur(18px)', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)', borderBottom: '1.5px solid rgba(255,255,255,0.15)' }}>
+      <Toolbar sx={{ backdropFilter: 'blur(18px)' }}>
         <IconButton edge="start" color="inherit" component={Link} to="/" sx={{ mr: 2 }}>
           <MovieIcon />
         </IconButton>

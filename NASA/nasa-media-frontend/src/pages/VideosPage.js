@@ -57,12 +57,17 @@ const VideosPage = () => {
       <Grid container spacing={3}>
         {videos.map(video => (
           <Grid item xs={12} sm={6} md={4} key={video.id}>
-            <Card>
-              <CardActionArea onClick={() => navigate(`/videos/${video.id}`)}>
-                <CardMedia component="img" height="180" image={video.thumbnail} alt={video.title} />
-                <CardContent>
-                  <Typography variant="h6" fontWeight={700}>{video.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">{video.description.slice(0, 80)}...</Typography>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3, boxShadow: '0 4px 24px 0 rgba(31,38,135,0.17)', transition: 'transform 0.2s', '&:hover': { transform: 'translateY(-8px) scale(1.03)', boxShadow: '0 8px 32px 0 rgba(31,38,135,0.27)' }, background: 'rgba(35,41,70,0.7)', backdropFilter: 'blur(4px)' }}>
+              <CardActionArea sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch', height: '100%' }} onClick={() => navigate(`/videos/${video.id}`)}>
+                <CardMedia
+                  component="img"
+                  image={video.thumbnail}
+                  alt={video.title}
+                  sx={{ height: 200, objectFit: 'cover', borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+                />
+                <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', minHeight: 100 }}>
+                  <Typography variant="h6" fontWeight={700} sx={{ mb: 1, minHeight: 48, color: 'primary.main', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{video.title}</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ minHeight: 40, overflow: 'hidden', textOverflow: 'ellipsis' }}>{video.description.slice(0, 80)}...</Typography>
                 </CardContent>
               </CardActionArea>
             </Card>

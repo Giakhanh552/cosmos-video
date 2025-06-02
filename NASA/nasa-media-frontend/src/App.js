@@ -46,28 +46,47 @@ const cosmosTheme = createTheme({
 });
 
 function App() {
+  // Link video background, bạn có thể thay đổi link này
+  const videoBg = "backgroundprofile.mp4"; // Thay bằng link video bạn muốn
   return (
     <ThemeProvider theme={cosmosTheme}>
       <CssBaseline />
+      {/* Video background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
+          zIndex: -1,
+          opacity: 1,
+          filter: 'none'
+        }}
+        src={videoBg}
+      />
       <Router>
         <Navbar />
-        <Container maxWidth="lg">
-          <Box mt={4}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/videos" element={<VideosPage />} />
-              <Route path="/videos/:id" element={<VideoDetail />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/add-video" element={<AddVideo />} />
-              <Route path="/add-category" element={<AddCategory />} />
-              <Route path="/categories/:categoryId/videos" element={<VideosPage />} />
-            </Routes>
-          </Box>
-        </Container>
+        <Box mt={4}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/videos" element={<VideosPage />} />
+            <Route path="/videos/:id" element={<VideoDetail />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/add-video" element={<AddVideo />} />
+            <Route path="/add-category" element={<AddCategory />} />
+            <Route path="/categories/:categoryId/videos" element={<VideosPage />} />
+          </Routes>
+        </Box>
       </Router>
     </ThemeProvider>
   );
