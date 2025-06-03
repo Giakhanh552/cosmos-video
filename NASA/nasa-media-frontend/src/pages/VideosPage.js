@@ -41,7 +41,7 @@ const VideosPage = () => {
     fetchCategoryName();
   }, [categoryId]);
 
-  if (error) return <Alert severity="error">{error}</Alert>;
+  if (error) return <Alert severity="error">Đăng nhập để xem video</Alert>;
   if (!videos.length) return (
     <Box mt={8} textAlign="center">
       <Typography variant="h6" color="text.secondary">

@@ -65,7 +65,7 @@ const AddVideo = () => {
       setUrl(res.data.url); // server trả về { url: ... }
       setSuccess('Tải video lên thành công!');
     } catch (err) {
-      setError('Tải video lên thất bại!');
+      setError('Tải video lên thất bại! ' + (err.response?.data?.error || err.message));
     } finally {
       setUploading(false);
     }
