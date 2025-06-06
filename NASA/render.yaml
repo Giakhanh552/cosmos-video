@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: cosmic-vision-backend
+    env: go
+    buildCommand: go build -o cosmic-vision-backend .
+    startCommand: ./cosmic-vision-backend
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GO_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+    healthCheckPath: /api/health 
