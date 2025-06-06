@@ -87,6 +87,15 @@ func ImportVideosFromNASA(c *gin.Context) {
 				url = link.Href
 			}
 		}
+		// Check if video with the same URL already exists
+		var existingVideo models.Video
+		err := config.DB.Collection("videos").FindOne(context.Background(), map[string]interface{}{"url": url}).Decode(&existingVideo)
+		if err == nil {
+			// Video with this URL already exists, skip it
+			fmt.Printf("Video with URL %s already exists, skipping\n", url)
+			continue
+		}
+
 		video := models.Video{
 			Title:       data.Title,
 			Description: data.Description,
@@ -94,7 +103,7 @@ func ImportVideosFromNASA(c *gin.Context) {
 			Thumbnail:   thumbnail,
 			CreatedAt:   0,
 		}
-		_, err := config.DB.Collection("videos").InsertOne(context.Background(), video)
+		_, err = config.DB.Collection("videos").InsertOne(context.Background(), video)
 		if err != nil {
 			fmt.Println("Error inserting video:", err)
 		}
@@ -152,11 +161,12 @@ func SearchVideos(c *gin.Context) {
 }
 
 type createVideoInput struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	URL         string `json:"url"`
-	Thumbnail   string `json:"thumbnail"`
-	CategoryID  string `json:"category_id"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	URL         string   `json:"url"`
+	Thumbnail   string   `json:"thumbnail"`
+	CategoryID  string   `json:"category_id,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
 }
 
 func CreateVideo(c *gin.Context) {
@@ -165,6 +175,30 @@ func CreateVideo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Validate required fields
+	if input.Title == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Title is required"})
+		return
+	}
+	if input.Description == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Description is required"})
+		return
+	}
+	if input.URL == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "URL is required"})
+		return
+	}
+
+	// Check if video with the same URL already exists
+	var existingVideo models.Video
+	err := config.DB.Collection("videos").FindOne(context.Background(), map[string]interface{}{"url": input.URL}).Decode(&existingVideo)
+	if err == nil {
+		// Video with this URL already exists
+		c.JSON(http.StatusConflict, gin.H{"error": "Video với URL này đã tồn tại. Không thể thêm video trùng lặp."})
+		return
+	}
+
 	userID, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found in context"})
@@ -175,11 +209,20 @@ func CreateVideo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid uploader ID"})
 		return
 	}
-	objCatID, err := primitive.ObjectIDFromHex(input.CategoryID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid category ID"})
-		return
+
+	// Handle optional category ID
+	var objCatID primitive.ObjectID
+	if input.CategoryID != "" {
+		objCatID, err = primitive.ObjectIDFromHex(input.CategoryID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid category ID"})
+			return
+		}
+	} else {
+		// Use a zero ObjectID for no category
+		objCatID = primitive.NilObjectID
 	}
+
 	video := models.Video{
 		ID:          primitive.NewObjectID(),
 		Title:       input.Title,
@@ -188,6 +231,7 @@ func CreateVideo(c *gin.Context) {
 		Thumbnail:   input.Thumbnail,
 		CategoryID:  objCatID,
 		UploaderID:  objUploaderID,
+		Tags:        input.Tags,
 		CreatedAt:   time.Now().Unix(),
 	}
 	_, err = config.DB.Collection("videos").InsertOne(context.Background(), video)

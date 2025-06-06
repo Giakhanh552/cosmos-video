@@ -7,8 +7,9 @@ type Video struct {
 	Title       string             `bson:"title" json:"title"`
 	Description string             `bson:"description" json:"description"`
 	URL         string             `bson:"url" json:"url"`
-	Thumbnail   string             `bson:"thumbnail" json:"thumbnail"`
-	CategoryID  primitive.ObjectID `bson:"category_id" json:"category_id"`
+	Thumbnail   string             `bson:"thumbnail,omitempty" json:"thumbnail,omitempty"`
+	CategoryID  primitive.ObjectID `bson:"category_id,omitempty" json:"category_id,omitempty"`
 	UploaderID  primitive.ObjectID `bson:"uploader_id" json:"uploader_id"`
+	Tags        []string           `bson:"tags,omitempty" json:"tags,omitempty"`
 	CreatedAt   int64              `bson:"created_at" json:"created_at"`
 }
