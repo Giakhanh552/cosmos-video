@@ -2,7 +2,11 @@ services:
   - type: web
     name: cosmic-vision-backend
     env: go
-    buildCommand: go build -o cosmic-vision-backend .
+    plan: free
+    rootDir: .
+    buildCommand: |
+      go mod download
+      go build -o cosmic-vision-backend .
     startCommand: ./cosmic-vision-backend
     envVars:
       - key: PORT
