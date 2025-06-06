@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"time"
 
-	"nasa-media-backend/config"
-	"nasa-media-backend/models"
+	"cosmic-vision-backend/config"
+	"cosmic-vision-backend/models"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
