@@ -234,7 +234,7 @@ const AddVideo = () => {
 
   // Generate tags from title using simple AI logic
   const generateTagsFromTitle = (title) => {
-    const spaceKeywords = ['space', 'cosmos', 'universe', 'galaxy', 'planet', 'star', 'nasa', 'astronaut', 'rocket', 'satellite', 'moon', 'mars', 'earth', 'solar', 'nebula', 'black hole'];
+    const spaceKeywords = ['space', 'cosmos', 'universe', 'galaxy', 'planet', 'star', 'astronomy', 'astronaut', 'rocket', 'satellite', 'moon', 'mars', 'earth', 'solar', 'nebula', 'black hole'];
     const words = title.toLowerCase().split(/\s+/);
     const tags = [];
     

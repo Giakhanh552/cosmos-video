@@ -341,7 +341,7 @@ const VideosPage = () => {
         <Typography variant="h6" sx={{ color: '#A1A1AA', mb: 3 }}>
           {categoryName 
             ? `Khám phá những video tuyệt vời về ${categoryName.toLowerCase()}`
-            : 'Bộ sưu tập video khám phá vũ trụ từ NASA và các nguồn uy tín'
+                            : 'Bộ sưu tập video khám phá vũ trụ từ các nguồn uy tín trên thế giới'
           }
         </Typography>
 

@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"nasa-media-backend/config"
-	"nasa-media-backend/models"
+	"cosmic-vision-backend/config"
+	"cosmic-vision-backend/models"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"

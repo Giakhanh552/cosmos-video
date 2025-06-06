@@ -116,7 +116,7 @@ const Navbar = () => {
               display: { xs: 'none', sm: 'block' }
             }}
           >
-            NASA Cosmos Explorer
+                          CosmicVision
           </Typography>
         </Box>
 

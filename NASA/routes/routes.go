@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"nasa-media-backend/controllers"
-	"nasa-media-backend/utils"
+	"cosmic-vision-backend/controllers"
+	"cosmic-vision-backend/utils"
 	"time"
 
 	"github.com/gin-contrib/cors"

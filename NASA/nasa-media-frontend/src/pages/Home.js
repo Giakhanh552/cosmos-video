@@ -71,7 +71,7 @@ const Home = () => {
     {
       icon: <VideoLibrary sx={{ fontSize: 40 }} />,
       title: 'Video Chất Lượng Cao',
-      description: 'Khám phá hàng ngàn video về vũ trụ với chất lượng 4K từ NASA và các nguồn uy tín',
+              description: 'Khám phá hàng ngàn video về vũ trụ với chất lượng 4K từ các nguồn uy tín trên thế giới',
       color: '#7C3AED'
     },
     {
@@ -265,7 +265,7 @@ const Home = () => {
                   textShadow: '0 0 40px rgba(124, 58, 237, 0.3)',
                 }}
               >
-                NASA Cosmos Explorer
+                CosmicVision
               </Typography>
               
               <Typography 
@@ -280,7 +280,7 @@ const Home = () => {
                 }}
                 className="fade-in-up"
               >
-                Khám phá vũ trụ bao la qua những video chất lượng cao từ NASA 
+                Khám phá vũ trụ bao la qua những video chất lượng cao từ các nguồn uy tín 
                 và các nguồn khoa học uy tín trên thế giới
               </Typography>
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"nasa-media-backend/config"
-	"nasa-media-backend/routes"
+	"cosmic-vision-backend/config"
+	"cosmic-vision-backend/routes"
 )
 
 func main() {

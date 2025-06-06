@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"nasa-media-backend/config"
-	"nasa-media-backend/models"
-	"nasa-media-backend/utils"
+	"cosmic-vision-backend/config"
+	"cosmic-vision-backend/models"
+	"cosmic-vision-backend/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"

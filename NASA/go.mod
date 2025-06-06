@@ -1,4 +1,4 @@
-module nasa-media-backend
+module cosmic-vision-backend
 
 go 1.24.2
 
